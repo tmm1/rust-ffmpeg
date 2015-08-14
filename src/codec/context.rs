@@ -1,3 +1,5 @@
+pub use super::flag::Flags;
+
 use std::ops::{Deref, DerefMut};
 use std::ptr;
 
@@ -136,6 +138,18 @@ impl Context {
 				count: (*self.as_ptr()).thread_count as usize,
 				safe:  (*self.as_ptr()).thread_safe_callbacks != 0,
 			}
+		}
+	}
+
+	pub fn flags(&self) -> Flags {
+		unsafe {
+			Flags::from_bits_truncate((*self.as_ptr()).flags)
+		}
+	}
+
+	pub fn set_flags(&mut self, value: Flags) {
+		unsafe {
+			(*self.as_mut_ptr()).flags = value.bits();
 		}
 	}
 }
